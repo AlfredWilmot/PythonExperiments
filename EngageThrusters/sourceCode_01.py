@@ -1,5 +1,4 @@
-# A simple script for animating a sprite's "thruster flame" using
-# the pygame module.
+# Simple car sim.
 
 import pygame, sys
 import numpy as np
@@ -57,6 +56,7 @@ class playerSprite:
 
         self.fwd = 0
 
+
     #########################################
     # Method for transforming sprite assets #
     #########################################
@@ -73,6 +73,7 @@ class playerSprite:
     # Methods for producing outputs for FSM ... #
     #############################################
 
+        # functions for generating Sequential flame animation.
         # fs(n+1) : fs(n) & fs(n-1) & ... & fs(2) & fs(1)
 
     def fs1(self):
@@ -92,6 +93,7 @@ class playerSprite:
     def fs6(self):
         self.fs5()
         self.TransformAsset(self.flameStep_6)
+
 
     ########################################
     # FSM for animating the thruster flame #
@@ -137,22 +139,30 @@ class playerSprite:
 
 
 
-    #################################
-    # Functions for controlling car #
-    #################################
+    ###############################
+    # Methods for controlling car #
+    ###############################
 
 
     def terminal_vel(self, fwdStep):
         return fwdStep*5
 
+    # positive factor = acceleratoin, negative factor = deceleration.
     def accelerate(self, factor=4.0):
         self.fwd += self.fwd*(factor/100)
 
+    # Returns true if too fast!
     def tooFast(self, fwdStep):
         return self.fwd > self.terminal_vel(fwdStep)
 
+    # Returns true if too slow!
     def tooSlow(self, fwdStep):
         return self.fwd < fwdStep
+
+
+    ###############################
+    # Main control method for car #
+    ###############################
 
     def DriveCar(self, angleStep, fwdStep):
 
@@ -178,6 +188,7 @@ class playerSprite:
                 # Turn on thruster!
                 self.animateflame()
 
+                # Car can only accelerate up-to terminal_vel.
                 if self.tooFast(fwdStep):
 
                     self.fwd = self.terminal_vel(fwdStep)
@@ -193,50 +204,21 @@ class playerSprite:
                     self.accelerate(factor=-2.0)
 
 
-
-
-
+            # Transforming the car's (x,y) coordinates depending on user-input.
             self.xCoord -= self.fwd*np.sin(self.theta*np.pi/180)
             self.yCoord -= self.fwd*np.cos(self.theta*np.pi/180)
 
+            # Debugger.
             print(self.fwd)
 
         # if pressed[K_DOWN]:
         #     self.xCoord += self.fwd*np.sin(self.theta*np.pi/180)
         #     self.yCoord += self.fwd*np.cos(self.theta*np.pi/180)
 
+        # Can Press ESC to quit game.
         if pressed[K_ESCAPE]:
             pygame.quit()
             sys.exit()
-
-            # Thruster! #
-
-        # if pressed[K_LSHIFT]:
-        #
-        #     myCar.animateflame()
-        #     self.fwd = self.fwd*1.02
-        #
-        #     # Setting Terminal velocity
-        #     if self.fwd >= fwdStep*3:
-        #         self.fwd = fwdStep*3
-        #
-        # else:
-        #
-        #     if self.fwd > fwdStep :
-        #         self.fwd = self.fwd*0.98
-        #     else:
-        #         self.fwd = fwdStep
-
-
-
-        #print(self.theta)
-        #print('[{},{}]'.format(self.xCoord, self.yCoord))
-
-
-
-
-
-
 
 
 
@@ -246,28 +228,29 @@ class playerSprite:
 
 myCar = playerSprite(100,100,'./Sprites/')
 
+
+
+
 #############
 # GAME LOOP #
 #############
 
 while True:
 
-
+    # Fill game window background with color!
     DISPLAYSURF.fill(backGndColor)
-    myCar.TransformAsset(myCar.carBody)
-    #myCar.animateflame()
-    #
-    # pressed = pygame.key.get_pressed()
-    # if pressed[K_UP]:
+
+    # Call method for controlling car (rotation in steps of 5 deg, linear movement in steps of 5 pixels).
     myCar.DriveCar(5,5)
 
+    # Apply coordinate-transformations to car and display it.
+    myCar.TransformAsset(myCar.carBody)
 
     # CONDITIONS FOR EXITING GAME LOOP.
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-
 
     # UPDATE GRAPHICS AND INDUCE FPS DELAY.
     pygame.display.update()
