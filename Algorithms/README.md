@@ -1,0 +1,2 @@
+Code developed while wokring on the ["Algorithms: Design and Analysis, Part 1"](https://learning.edx.org/course/course-v1:StanfordOnline+CSX0003+1T2020/home) course from edX, 
+and while reading a book by M.Hetland entitled "Python algorithms: Mastering basic allgorithms in the python language".
