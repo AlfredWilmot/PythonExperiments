@@ -5,7 +5,7 @@ Created on Sun Jun 20 00:19:59 2021
 Comparing the Merge Sort algorithm against other more basic sorting algorithms.
 This demonstrates the benefit of the "divide and conquer" paradigm.
 
-implement insertion sort and bubble sort algorithms, and compare these to merge sort.
+implement insertion, selection, and bubble sort algorithms, and compare these to merge sort.
 
 @author: alfred
 """
