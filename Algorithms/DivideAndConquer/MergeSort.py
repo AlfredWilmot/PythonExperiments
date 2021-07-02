@@ -99,7 +99,11 @@ def merge_sort(arr,debug=False):
         return merge(arr0,arr1,debug)
     
 
-def merge(arr0,arr1,debug=False):
+def merge_v0(arr0,arr1,debug=False):
+    """
+    my first version of the merge algorithm: here I'm trying to utilize the memory 
+    already used for the input arrays instead of making new variables to hold data.s
+    """
     
     merged_arr = []
     
@@ -119,6 +123,49 @@ def merge(arr0,arr1,debug=False):
     if debug: print("Merged: " + str(merged_arr))
     
     return merged_arr
+
+
+
+def merge(A,B):
+    """
+    Merge two sub-arrays together such that the output array contains their 
+    sorted values. Note: the sub-arrays must already be in sorted order! 
+    """  
+    # defining lengths of arrays
+    n_a = len(A)
+    n_b = len(B)
+    n_c = n_a+n_b
+    
+    # output array of length n_c
+    C = []
+    
+    # indicese used to traverse through A and B arrays, respecitvely
+    idx_a = 0
+    idx_b = 0
+    
+    # single for-loop, linear time O(n) #
+    for k in range(n_c):
+        
+        # basic element wise comparison of either sub-array
+        if A[idx_a] < B[idx_b]:
+            C.append(A[idx_a])
+            idx_a += 1
+        else:
+            C.append(B[idx_b])
+            idx_b += 1
+        
+        # managing end-cases:    
+        # simply append the remainder of the untraversed sub-array
+        # when the other sub-array has been fully traversed, 
+        # then exit the loop
+        if idx_a > n_a-1:
+            C+= B[idx_b:]
+            break
+        elif idx_b > n_b-1:
+            C+= A[idx_a:]
+            break
+    
+    return C
 
 
 """
